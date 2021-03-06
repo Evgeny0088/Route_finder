@@ -48,13 +48,21 @@ class Routes:
 				self.routes[self.route_number] = result,cost
 				self.route_list = self.route_list[:-1]
 				self.route = ''
-		return 'no available routes...'
 
-	def cheapest_route(self,cost = None):
-		if cost is None: cost = self.route_list[0]
-		for i in self.route:
-			cost=i if i<cost else i
-		return cost
+	@staticmethod
+	def cheapest_route(routes):
+		cost = tuple()
+		if routes:
+			values = routes.values()
+			value_iter = iter(values)
+			cost = next(value_iter)
+			c = cost[1]
+			for i in routes.keys():
+				if c>routes[i][1]:
+					c=routes[i][1]
+					cost[0] = routes.get(i)[0]
+			return f'cheapest route is: {cost}'
+		return f'There is not routes...'
 
 	def __str__(self):
 		return str(self.routes)
@@ -63,7 +71,7 @@ routes = Routes()
 
 def find_route(start = None, end = None):
 	if start is None or end is None:
-		return 'no routes are found'
+		return
 	routes._add(start)
 	if start == end:
 		result = routes._get_routes
@@ -80,7 +88,9 @@ def find_route(start = None, end = None):
 
 
 if __name__ == '__main__':
-	route = find_route('a','c')
+	route = find_route('d','c')
 	print(route)
+	cheapest_one = routes.cheapest_route(route)
+	print(cheapest_one)
 
 
